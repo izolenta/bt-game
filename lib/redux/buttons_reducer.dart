@@ -1,4 +1,5 @@
 import 'package:bt_game/redux/actions/generate_field_success_action.dart';
+import 'package:bt_game/redux/actions/move_success_action.dart';
 import 'package:bt_game/redux/actions/resize_action.dart';
 import 'package:redux/redux.dart';
 
@@ -12,6 +13,7 @@ class ButtonsReducer {
     _reducer = combineReducers([
       TypedReducer<ButtonsState, ResizeAction>(_onResize),
       TypedReducer<ButtonsState, GenerateFieldSuccessAction>(_onFieldGenerated),
+      TypedReducer<ButtonsState, MoveSuccessAction>(_onMoveDone),
     ]);
 
   }
@@ -23,6 +25,10 @@ class ButtonsReducer {
         ..screenSize = action.size);
 
   ButtonsState _onFieldGenerated(ButtonsState state, GenerateFieldSuccessAction action) =>
+      state.rebuild((b) => b
+        ..board.replace(action.board));
+
+  ButtonsState _onMoveDone(ButtonsState state, MoveSuccessAction action) =>
       state.rebuild((b) => b
         ..board.replace(action.board));
 }

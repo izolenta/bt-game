@@ -25,6 +25,16 @@ class SpriteService {
           srcPosition: Vector2(i * 256, 256), srcSize: Vector2(256, 256));
       _starBlocks.add(next);
     }
+    for (var i=0; i<4; i++) {
+      var next = Sprite(Flame.images.fromCache('sprites.png'),
+          srcPosition: Vector2(i * 384, 512), srcSize: Vector2(384, 180));
+      _buttons.add(next);
+    }
+    for (var i=0; i<2; i++) {
+      var next = Sprite(Flame.images.fromCache('sprites.png'),
+          srcPosition: Vector2(i * 384, 692), srcSize: Vector2(384, 180));
+      _buttons.add(next);
+    }
     _isInitialized = true;
   }
 
