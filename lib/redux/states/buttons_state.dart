@@ -14,4 +14,6 @@ abstract class ButtonsState implements Built<ButtonsState, ButtonsStateBuilder> 
   Vector2? get screenSize;
 
   int get dimension;
+
+  int get turnsLeft;
 }

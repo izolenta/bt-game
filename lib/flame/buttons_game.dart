@@ -22,7 +22,7 @@ class ButtonsGame extends FlameGame with HasTappables {
   final ButtonsDispatcher _dispatcher;
   final SpriteService _spriteService;
   final LifecycleNotifier _notifier;
-
+  late final TextComponent _turnsWidget;
   final cells = <SpriteComponent>[];
 
   ButtonsState get state => _store.state;
@@ -30,6 +30,8 @@ class ButtonsGame extends FlameGame with HasTappables {
   num get width => state.screenSize!.x;
   num get height => state.screenSize!.y;
   double get cellSize => (width - 20)/dimension;
+
+  String get turnsLeftString => 'TURNS: ${state.turnsLeft}';
 
   ButtonsGame(this._store, this._dispatcher, this._spriteService, this._notifier) {
     _dispatcher.onAction.listen((Object act) {
@@ -45,26 +47,7 @@ class ButtonsGame extends FlameGame with HasTappables {
     await Flame.images.loadAll(items);
     _spriteService.initSprites();
     _fillInitialBoard();
-    _dispatcher.dispatch(GenerateFieldAction(10, Difficulty.easy));
-    final turns = TextComponent(
-        text: 'TURNS: 25',
-        position: Vector2(10, 40),
-        textRenderer: TextPaint(
-          style: TextStyle(
-              fontFamily: 'Lilita',
-              fontSize: 25,
-              foreground: Paint()
-                ..shader = ui.Gradient.linear(
-                  const Offset(0,0),
-                  const Offset(0,20),
-                  [
-                    Colors.blue.shade50,
-                    Colors.blue.shade700
-                  ],
-          ),
-        ),
-        ));
-    add(turns);
+    _dispatcher.dispatch(GenerateFieldAction(state.dimension, Difficulty.easy));
     _notifier.onBoardGenerated.listen(_onBoardGenerated);
     _notifier.onMoveDone.listen(_onMoveDone);
     super.onLoad();
@@ -92,6 +75,29 @@ class ButtonsGame extends FlameGame with HasTappables {
   Future _onBoardGenerated(void _) async {
     await _fillStartPosition();
     _addButtons();
+    _addTurnsText();
+  }
+
+  void _addTurnsText() {
+    _turnsWidget = TextComponent(
+        text: turnsLeftString,
+        position: Vector2(10, 40),
+        textRenderer: TextPaint(
+          style: TextStyle(
+            fontFamily: 'Lilita',
+            fontSize: 25,
+            foreground: Paint()
+              ..shader = ui.Gradient.linear(
+                const Offset(0,0),
+                const Offset(0,20),
+                [
+                  Colors.blue.shade50,
+                  Colors.blue.shade700
+                ],
+              ),
+          ),
+        ));
+    add(_turnsWidget);
   }
 
   void _fillInitialBoard() {
@@ -138,11 +144,7 @@ class ButtonsGame extends FlameGame with HasTappables {
         var cc = CurvedEffectController(0.2, Curves.decelerate);
         widget.add(OpacityEffect.to(1, cc));
         if (cell.isMarked) {
-          widget.add(ColorEffect(
-            const Color(0xFFFFFFFF),
-            const Offset(0.0, 0.3),
-            InfiniteEffectController(LinearEffectController(1)),
-          ));
+          _addPulse(widget);
         }
         cells[cnt-20] = widget;
         add(widget);
@@ -172,31 +174,47 @@ class ButtonsGame extends FlameGame with HasTappables {
         size: Vector2(cellSize, cellSize),
       );
       if (cell.isMarked) {
-        widget.add(ColorEffect(
-          const Color(0xFF000000),
-          const Offset(0.0, 0.4),
-          InfiniteEffectController(SequenceEffectController([
-            CurvedEffectController(0.6, Curves.easeOut),
-            ReverseCurvedEffectController(0.6, Curves.easeIn),]
-          )),
-        ));
+        _addPulse(widget);
       }
       cells[cnt] = widget;
       add(widget);
       cnt++;
     }
+    for (var comp in children.whereType<ColorButton>()) {
+      if (comp.color == state.board!.cells[0].color && !comp.isHidden) {
+        comp.hide();
+      }
+      if (comp.color != state.board!.cells[0].color && comp.isHidden) {
+        comp.reveal();
+      }
+    }
+    _turnsWidget.text = turnsLeftString;
+  }
+
+  void _addPulse(HasPaint widget) {
+    widget.add(ColorEffect(
+      const Color(0xFF000000),
+      const Offset(0.0, 0.4),
+      InfiniteEffectController(SequenceEffectController([
+        CurvedEffectController(1, Curves.easeOut),
+        ReverseCurvedEffectController(1, Curves.easeIn),
+      ]
+      )),
+    ));
   }
 
   void _addButtons() {
     var fraction = width / 3;
+    var buttonWidth = 384/width*fraction;
     for (var i=0; i<6; i++) {
       final sprite = _spriteService.buttons[i];
       final widget = ColorButton(
         sprite,
         i,
-        Vector2(40 + 180*(i ~/ 3).toDouble(), 500+80*(i%3)),
+        Vector2(40 + buttonWidth/2 + 180*(i ~/ 3).toDouble(), 500+80*(i%3)),
         Vector2(384/width*fraction, 180/width*fraction),
         _dispatcher,
+        Anchor.center,
       );
       add(widget);
     }

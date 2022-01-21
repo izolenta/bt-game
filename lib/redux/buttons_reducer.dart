@@ -26,9 +26,11 @@ class ButtonsReducer {
 
   ButtonsState _onFieldGenerated(ButtonsState state, GenerateFieldSuccessAction action) =>
       state.rebuild((b) => b
+        ..turnsLeft = action.maxTurns
         ..board.replace(action.board));
 
   ButtonsState _onMoveDone(ButtonsState state, MoveSuccessAction action) =>
       state.rebuild((b) => b
+        ..turnsLeft = state.turnsLeft-1
         ..board.replace(action.board));
 }

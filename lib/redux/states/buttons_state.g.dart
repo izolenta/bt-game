@@ -13,14 +13,22 @@ class _$ButtonsState extends ButtonsState {
   final Vector2? screenSize;
   @override
   final int dimension;
+  @override
+  final int turnsLeft;
 
   factory _$ButtonsState([void Function(ButtonsStateBuilder)? updates]) =>
       (new ButtonsStateBuilder()..update(updates)).build();
 
-  _$ButtonsState._({this.board, this.screenSize, required this.dimension})
+  _$ButtonsState._(
+      {this.board,
+      this.screenSize,
+      required this.dimension,
+      required this.turnsLeft})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         dimension, 'ButtonsState', 'dimension');
+    BuiltValueNullFieldError.checkNotNull(
+        turnsLeft, 'ButtonsState', 'turnsLeft');
   }
 
   @override
@@ -36,13 +44,16 @@ class _$ButtonsState extends ButtonsState {
     return other is ButtonsState &&
         board == other.board &&
         screenSize == other.screenSize &&
-        dimension == other.dimension;
+        dimension == other.dimension &&
+        turnsLeft == other.turnsLeft;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc(0, board.hashCode), screenSize.hashCode), dimension.hashCode));
+        $jc($jc($jc(0, board.hashCode), screenSize.hashCode),
+            dimension.hashCode),
+        turnsLeft.hashCode));
   }
 
   @override
@@ -50,7 +61,8 @@ class _$ButtonsState extends ButtonsState {
     return (newBuiltValueToStringHelper('ButtonsState')
           ..add('board', board)
           ..add('screenSize', screenSize)
-          ..add('dimension', dimension))
+          ..add('dimension', dimension)
+          ..add('turnsLeft', turnsLeft))
         .toString();
   }
 }
@@ -71,6 +83,10 @@ class ButtonsStateBuilder
   int? get dimension => _$this._dimension;
   set dimension(int? dimension) => _$this._dimension = dimension;
 
+  int? _turnsLeft;
+  int? get turnsLeft => _$this._turnsLeft;
+  set turnsLeft(int? turnsLeft) => _$this._turnsLeft = turnsLeft;
+
   ButtonsStateBuilder();
 
   ButtonsStateBuilder get _$this {
@@ -79,6 +95,7 @@ class ButtonsStateBuilder
       _board = $v.board?.toBuilder();
       _screenSize = $v.screenSize;
       _dimension = $v.dimension;
+      _turnsLeft = $v.turnsLeft;
       _$v = null;
     }
     return this;
@@ -104,7 +121,9 @@ class ButtonsStateBuilder
               board: _board?.build(),
               screenSize: screenSize,
               dimension: BuiltValueNullFieldError.checkNotNull(
-                  dimension, 'ButtonsState', 'dimension'));
+                  dimension, 'ButtonsState', 'dimension'),
+              turnsLeft: BuiltValueNullFieldError.checkNotNull(
+                  turnsLeft, 'ButtonsState', 'turnsLeft'));
     } catch (_) {
       late String _$failedField;
       try {
