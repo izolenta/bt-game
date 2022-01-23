@@ -10,10 +10,8 @@ abstract class ButtonsState implements Built<ButtonsState, ButtonsStateBuilder> 
   ButtonsState._();
 
   Board? get board;
-
   Vector2? get screenSize;
-
   int get dimension;
-
   int get turnsLeft;
+  int get topPadding;
 }

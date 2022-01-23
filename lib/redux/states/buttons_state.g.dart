@@ -15,6 +15,8 @@ class _$ButtonsState extends ButtonsState {
   final int dimension;
   @override
   final int turnsLeft;
+  @override
+  final int topPadding;
 
   factory _$ButtonsState([void Function(ButtonsStateBuilder)? updates]) =>
       (new ButtonsStateBuilder()..update(updates)).build();
@@ -23,12 +25,15 @@ class _$ButtonsState extends ButtonsState {
       {this.board,
       this.screenSize,
       required this.dimension,
-      required this.turnsLeft})
+      required this.turnsLeft,
+      required this.topPadding})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         dimension, 'ButtonsState', 'dimension');
     BuiltValueNullFieldError.checkNotNull(
         turnsLeft, 'ButtonsState', 'turnsLeft');
+    BuiltValueNullFieldError.checkNotNull(
+        topPadding, 'ButtonsState', 'topPadding');
   }
 
   @override
@@ -45,15 +50,18 @@ class _$ButtonsState extends ButtonsState {
         board == other.board &&
         screenSize == other.screenSize &&
         dimension == other.dimension &&
-        turnsLeft == other.turnsLeft;
+        turnsLeft == other.turnsLeft &&
+        topPadding == other.topPadding;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, board.hashCode), screenSize.hashCode),
-            dimension.hashCode),
-        turnsLeft.hashCode));
+        $jc(
+            $jc($jc($jc(0, board.hashCode), screenSize.hashCode),
+                dimension.hashCode),
+            turnsLeft.hashCode),
+        topPadding.hashCode));
   }
 
   @override
@@ -62,7 +70,8 @@ class _$ButtonsState extends ButtonsState {
           ..add('board', board)
           ..add('screenSize', screenSize)
           ..add('dimension', dimension)
-          ..add('turnsLeft', turnsLeft))
+          ..add('turnsLeft', turnsLeft)
+          ..add('topPadding', topPadding))
         .toString();
   }
 }
@@ -87,6 +96,10 @@ class ButtonsStateBuilder
   int? get turnsLeft => _$this._turnsLeft;
   set turnsLeft(int? turnsLeft) => _$this._turnsLeft = turnsLeft;
 
+  int? _topPadding;
+  int? get topPadding => _$this._topPadding;
+  set topPadding(int? topPadding) => _$this._topPadding = topPadding;
+
   ButtonsStateBuilder();
 
   ButtonsStateBuilder get _$this {
@@ -96,6 +109,7 @@ class ButtonsStateBuilder
       _screenSize = $v.screenSize;
       _dimension = $v.dimension;
       _turnsLeft = $v.turnsLeft;
+      _topPadding = $v.topPadding;
       _$v = null;
     }
     return this;
@@ -123,7 +137,9 @@ class ButtonsStateBuilder
               dimension: BuiltValueNullFieldError.checkNotNull(
                   dimension, 'ButtonsState', 'dimension'),
               turnsLeft: BuiltValueNullFieldError.checkNotNull(
-                  turnsLeft, 'ButtonsState', 'turnsLeft'));
+                  turnsLeft, 'ButtonsState', 'turnsLeft'),
+              topPadding: BuiltValueNullFieldError.checkNotNull(
+                  topPadding, 'ButtonsState', 'topPadding'));
     } catch (_) {
       late String _$failedField;
       try {

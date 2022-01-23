@@ -1,3 +1,4 @@
+import 'package:bt_game/redux/actions/change_need_safe_area_action.dart';
 import 'package:bt_game/redux/actions/generate_field_success_action.dart';
 import 'package:bt_game/redux/actions/move_success_action.dart';
 import 'package:bt_game/redux/actions/resize_action.dart';
@@ -14,6 +15,7 @@ class ButtonsReducer {
       TypedReducer<ButtonsState, ResizeAction>(_onResize),
       TypedReducer<ButtonsState, GenerateFieldSuccessAction>(_onFieldGenerated),
       TypedReducer<ButtonsState, MoveSuccessAction>(_onMoveDone),
+      TypedReducer<ButtonsState, ChangeNeedSafeAreaAction>(_onChangeNeedSafeArea),
     ]);
 
   }
@@ -23,6 +25,10 @@ class ButtonsReducer {
   ButtonsState _onResize(ButtonsState state, ResizeAction action) =>
       state.rebuild((b) => b
         ..screenSize = action.size);
+
+  ButtonsState _onChangeNeedSafeArea(ButtonsState state, ChangeNeedSafeAreaAction action) =>
+      state.rebuild((b) => b
+        ..topPadding = action.topPadding);
 
   ButtonsState _onFieldGenerated(ButtonsState state, GenerateFieldSuccessAction action) =>
       state.rebuild((b) => b

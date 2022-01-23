@@ -11,8 +11,6 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
@@ -21,7 +19,7 @@ import 'components/background.dart';
 class ButtonsGame extends FlameGame with HasTappables {
 
   static const hGap = 30;
-  static const vGap = 20;
+  static const vGap = 5;
   static const frameThickness = 7;
   static const frameGap = 4;
   static const frameRound = 4.0;
@@ -40,6 +38,7 @@ class ButtonsGame extends FlameGame with HasTappables {
   int get dimension => state.dimension;
   num get width => state.screenSize!.x;
   num get height => state.screenSize!.y;
+  int get topPadding => state.topPadding;
   double get cellSize => (width - hGap*2)/dimension;
 
   String get turnsLeftString => 'TURNS: ${state.turnsLeft}';
@@ -92,11 +91,11 @@ class ButtonsGame extends FlameGame with HasTappables {
 
   void _renderFrame(Canvas canvas) {
     final outerX1 = (hGap - frameGap - frameThickness).toDouble();
-    final outerY1 = (60 + vGap - frameGap - frameThickness).toDouble();
+    final outerY1 = (topPadding + 30 + vGap - frameGap - frameThickness).toDouble();
     final outerX2 = (outerX1 + cellSize * state.dimension + frameGap*2 + frameThickness*2).toDouble();
     final outerY2 = (outerY1 + cellSize * state.dimension + frameGap*2 + frameThickness*2).toDouble();
     final innerX1 = (hGap - frameGap).toDouble();
-    final innerY1 = (60 + vGap - frameGap).toDouble();
+    final innerY1 = (topPadding + 30 + vGap - frameGap).toDouble();
     final innerX2 = (innerX1 + cellSize * state.dimension + frameGap*2).toDouble();
     final innerY2 = (innerY1 + cellSize * state.dimension + frameGap*2).toDouble();
     canvas.drawDRRect(
@@ -107,7 +106,7 @@ class ButtonsGame extends FlameGame with HasTappables {
 
   void _addTurnsText() {
     final outerX1 = (hGap - frameGap - frameThickness).toDouble();
-    final outerY1 = (30 + vGap - frameGap - frameThickness).toDouble();
+    final outerY1 = (topPadding + vGap - frameGap - frameThickness).toDouble();
     _turnsWidget = TextComponent(
         text: turnsLeftString,
         position: Vector2(outerX1, outerY1),
@@ -135,7 +134,7 @@ class ButtonsGame extends FlameGame with HasTappables {
       for (int j=0; j<dimension; j++) {
         final widget = SpriteComponent(
           sprite: sprite,
-          position: Vector2(hGap+j*cellSize, 60+vGap+i*cellSize),
+          position: Vector2(hGap+j*cellSize, topPadding + 30 +vGap+i*cellSize),
           size: Vector2(cellSize, cellSize),
         );
         widget.setAlpha(0);
@@ -166,7 +165,7 @@ class ButtonsGame extends FlameGame with HasTappables {
         remove(oldWidget);
         final widget = SpriteComponent(
           sprite: sprite,
-          position: Vector2(hGap+x*cellSize, 60+vGap+y*cellSize),
+          position: Vector2(hGap+x*cellSize, topPadding+30+vGap+y*cellSize),
           size: Vector2(cellSize, cellSize),
         );
         widget.setAlpha((255*0.3).toInt());
@@ -199,7 +198,7 @@ class ButtonsGame extends FlameGame with HasTappables {
       remove(oldWidget);
       final widget = SpriteComponent(
         sprite: sprite,
-        position: Vector2(hGap+x*cellSize, 60+vGap+y*cellSize),
+        position: Vector2(hGap+x*cellSize, topPadding+30+vGap+y*cellSize),
         size: Vector2(cellSize, cellSize),
       );
       if (cell.isMarked) {
