@@ -9,12 +9,9 @@ class SpriteService {
   late final _cleanBlocks = <Sprite>[];
   late final _starBlocks = <Sprite>[];
   late final _buttons = <Sprite>[];
+  late final Sprite _background;
 
   bool get isInitialized => _isInitialized;
-
-  SpriteService() {
-    var s = 1;
-  }
 
   void initSprites() {
     for (var i = 0; i < 7; i++) {
@@ -35,10 +32,12 @@ class SpriteService {
           srcPosition: Vector2(i * 384, 692), srcSize: Vector2(384, 180));
       _buttons.add(next);
     }
+    _background = Sprite(Flame.images.fromCache('bg.png'));
     _isInitialized = true;
   }
 
   List<Sprite> get cleanBlocks => _cleanBlocks;
   List<Sprite> get starBlocks => _starBlocks;
   List<Sprite> get buttons => _buttons;
+  Sprite get background => _background;
 }

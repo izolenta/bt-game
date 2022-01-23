@@ -30,7 +30,7 @@ class ColorButton extends PositionComponent with Tappable {
   }
 
   @override
-  bool onTapDown(TapDownInfo event) {
+  bool onTapDown(TapDownInfo info) {
     if (_hidden) {
       return false;
     }
@@ -39,7 +39,7 @@ class ColorButton extends PositionComponent with Tappable {
   }
 
   @override
-  bool onTapUp(TapUpInfo event) {
+  bool onTapUp(TapUpInfo info) {
     if (_hidden) {
       return false;
     }

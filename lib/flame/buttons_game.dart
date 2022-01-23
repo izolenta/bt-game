@@ -16,20 +16,31 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
+import 'components/background.dart';
+
 class ButtonsGame extends FlameGame with HasTappables {
+
+  static const hGap = 30;
+  static const vGap = 20;
+  static const frameThickness = 7;
+  static const frameGap = 4;
+  static const frameRound = 4.0;
 
   final Store<ButtonsState> _store;
   final ButtonsDispatcher _dispatcher;
   final SpriteService _spriteService;
   final LifecycleNotifier _notifier;
+
   late final TextComponent _turnsWidget;
   final cells = <SpriteComponent>[];
+
+  Background? _background;
 
   ButtonsState get state => _store.state;
   int get dimension => state.dimension;
   num get width => state.screenSize!.x;
   num get height => state.screenSize!.y;
-  double get cellSize => (width - 20)/dimension;
+  double get cellSize => (width - hGap*2)/dimension;
 
   String get turnsLeftString => 'TURNS: ${state.turnsLeft}';
 
@@ -42,31 +53,32 @@ class ButtonsGame extends FlameGame with HasTappables {
   @override
   Future<void> onLoad() async {
     final items = [
-      'sprites.png'
+      'sprites.png',
+      'bg.png'
     ];
     await Flame.images.loadAll(items);
     _spriteService.initSprites();
+    _background = Background(_spriteService, state.screenSize!);
     _fillInitialBoard();
-    _dispatcher.dispatch(GenerateFieldAction(state.dimension, Difficulty.easy));
+    _dispatcher.dispatch(GenerateFieldAction(state.dimension, Difficulty.hard));
     _notifier.onBoardGenerated.listen(_onBoardGenerated);
     _notifier.onMoveDone.listen(_onMoveDone);
     super.onLoad();
   }
 
   @override
-  void update(double dt) {
-    super.update(dt);
-  }
-
-  @override
   void render(Canvas canvas) {
+    if (_background != null) {
+      _background!.render(canvas);
+    }
+    _renderFrame(canvas);
     super.render(canvas);
   }
 
   @override
-  void onGameResize(Vector2 size) {
-    _dispatcher.dispatch(ResizeAction(size));
-    super.onGameResize(size);
+  void onGameResize(Vector2 canvasSize) {
+    _dispatcher.dispatch(ResizeAction(canvasSize));
+    super.onGameResize(canvasSize);
   }
 
   @override
@@ -78,10 +90,27 @@ class ButtonsGame extends FlameGame with HasTappables {
     _addTurnsText();
   }
 
+  void _renderFrame(Canvas canvas) {
+    final outerX1 = (hGap - frameGap - frameThickness).toDouble();
+    final outerY1 = (60 + vGap - frameGap - frameThickness).toDouble();
+    final outerX2 = (outerX1 + cellSize * state.dimension + frameGap*2 + frameThickness*2).toDouble();
+    final outerY2 = (outerY1 + cellSize * state.dimension + frameGap*2 + frameThickness*2).toDouble();
+    final innerX1 = (hGap - frameGap).toDouble();
+    final innerY1 = (60 + vGap - frameGap).toDouble();
+    final innerX2 = (innerX1 + cellSize * state.dimension + frameGap*2).toDouble();
+    final innerY2 = (innerY1 + cellSize * state.dimension + frameGap*2).toDouble();
+    canvas.drawDRRect(
+        RRect.fromLTRBXY(outerX1, outerY1, outerX2, outerY2, frameRound, frameRound),
+        RRect.fromLTRBXY(innerX1, innerY1, innerX2, innerY2, frameRound/2, frameRound/2),
+        Paint()..color = Colors.white24);
+  }
+
   void _addTurnsText() {
+    final outerX1 = (hGap - frameGap - frameThickness).toDouble();
+    final outerY1 = (30 + vGap - frameGap - frameThickness).toDouble();
     _turnsWidget = TextComponent(
         text: turnsLeftString,
-        position: Vector2(10, 40),
+        position: Vector2(outerX1, outerY1),
         textRenderer: TextPaint(
           style: TextStyle(
             fontFamily: 'Lilita',
@@ -106,7 +135,7 @@ class ButtonsGame extends FlameGame with HasTappables {
       for (int j=0; j<dimension; j++) {
         final widget = SpriteComponent(
           sprite: sprite,
-          position: Vector2(10+j*cellSize, 70+i*cellSize),
+          position: Vector2(hGap+j*cellSize, 60+vGap+i*cellSize),
           size: Vector2(cellSize, cellSize),
         );
         widget.setAlpha(0);
@@ -137,7 +166,7 @@ class ButtonsGame extends FlameGame with HasTappables {
         remove(oldWidget);
         final widget = SpriteComponent(
           sprite: sprite,
-          position: Vector2(10+x*cellSize, 70+y*cellSize),
+          position: Vector2(hGap+x*cellSize, 60+vGap+y*cellSize),
           size: Vector2(cellSize, cellSize),
         );
         widget.setAlpha((255*0.3).toInt());
@@ -170,7 +199,7 @@ class ButtonsGame extends FlameGame with HasTappables {
       remove(oldWidget);
       final widget = SpriteComponent(
         sprite: sprite,
-        position: Vector2(10+x*cellSize, 70+y*cellSize),
+        position: Vector2(hGap+x*cellSize, 60+vGap+y*cellSize),
         size: Vector2(cellSize, cellSize),
       );
       if (cell.isMarked) {

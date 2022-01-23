@@ -34,7 +34,7 @@ class ButtonsEffects {
 
   Stream<Object?> _onGenerateField(Stream<GenerateFieldAction> actions, EpicStore<ButtonsState> store) =>
       actions.asyncExpand((action) async* {
-        var board = await compute(_generateField, GenerateFieldParam(action.dimension, action.difficulty, 5, _solver));
+        var board = await compute(_generateField, GenerateFieldParam(action.dimension, action.difficulty, 7, _solver));
         yield GenerateFieldSuccessAction(board, getMaxTurns(action.dimension));
       });
   Stream<Object?> _onGenerateFieldSuccess(Stream<GenerateFieldSuccessAction> actions, EpicStore<ButtonsState> store) =>

@@ -40,4 +40,5 @@ flutter:
         - asset: fonts/LilitaOne-Regular.ttf
   assets:
     - assets/images/sprites.png
+    - assets/images/bg.png
 
