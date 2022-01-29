@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bt_game/redux/actions/generate_field_action.dart';
 import 'package:bt_game/redux/actions/generate_field_success_action.dart';
 import 'package:bt_game/redux/models/make_move_param.dart';
@@ -11,7 +13,9 @@ import 'actions/move_success_action.dart';
 import 'models/generate_field_param.dart';
 import 'states/buttons_state.dart';
 
-Board _generateField(GenerateFieldParam param) => param.solver.generateField(param.size, param.difficulty, param.deepCheck);
+Future<Board> _generateField(GenerateFieldParam param) async {
+  return param.solver.getGameFieldBySeed(param.size, param.id);
+}
 
 Board _makeMove(MakeMoveParam param) => param.boardService.move(param.board, param.color);
 
@@ -34,7 +38,13 @@ class ButtonsEffects {
 
   Stream<Object?> _onGenerateField(Stream<GenerateFieldAction> actions, EpicStore<ButtonsState> store) =>
       actions.asyncExpand((action) async* {
-        var board = await compute(_generateField, GenerateFieldParam(action.dimension, action.difficulty, 7, _solver));
+        var allBoards = store.state.boardConfigState!.boardSetsForSize[action.dimension]!.boardsForDifficulty[action.difficulty]!
+          .where((element) => !element.isAccessed).toList();
+        if (allBoards.isEmpty) {
+          allBoards = store.state.boardConfigState!.boardSetsForSize[action.dimension]!.boardsForDifficulty[action.difficulty]!;
+        }
+        final id = allBoards[Random().nextInt(allBoards.length)].boardId;
+        var board = await compute(_generateField, GenerateFieldParam(action.dimension, id, _solver));
         yield GenerateFieldSuccessAction(board, getMaxTurns(action.dimension));
       });
   Stream<Object?> _onGenerateFieldSuccess(Stream<GenerateFieldSuccessAction> actions, EpicStore<ButtonsState> store) =>

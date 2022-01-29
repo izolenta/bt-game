@@ -17,6 +17,8 @@ class _$ButtonsState extends ButtonsState {
   final int turnsLeft;
   @override
   final int topPadding;
+  @override
+  final BoardConfigState? boardConfigState;
 
   factory _$ButtonsState([void Function(ButtonsStateBuilder)? updates]) =>
       (new ButtonsStateBuilder()..update(updates)).build();
@@ -26,7 +28,8 @@ class _$ButtonsState extends ButtonsState {
       this.screenSize,
       required this.dimension,
       required this.turnsLeft,
-      required this.topPadding})
+      required this.topPadding,
+      this.boardConfigState})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
         dimension, 'ButtonsState', 'dimension');
@@ -51,17 +54,20 @@ class _$ButtonsState extends ButtonsState {
         screenSize == other.screenSize &&
         dimension == other.dimension &&
         turnsLeft == other.turnsLeft &&
-        topPadding == other.topPadding;
+        topPadding == other.topPadding &&
+        boardConfigState == other.boardConfigState;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc(0, board.hashCode), screenSize.hashCode),
-                dimension.hashCode),
-            turnsLeft.hashCode),
-        topPadding.hashCode));
+            $jc(
+                $jc($jc($jc(0, board.hashCode), screenSize.hashCode),
+                    dimension.hashCode),
+                turnsLeft.hashCode),
+            topPadding.hashCode),
+        boardConfigState.hashCode));
   }
 
   @override
@@ -71,7 +77,8 @@ class _$ButtonsState extends ButtonsState {
           ..add('screenSize', screenSize)
           ..add('dimension', dimension)
           ..add('turnsLeft', turnsLeft)
-          ..add('topPadding', topPadding))
+          ..add('topPadding', topPadding)
+          ..add('boardConfigState', boardConfigState))
         .toString();
   }
 }
@@ -100,6 +107,12 @@ class ButtonsStateBuilder
   int? get topPadding => _$this._topPadding;
   set topPadding(int? topPadding) => _$this._topPadding = topPadding;
 
+  BoardConfigStateBuilder? _boardConfigState;
+  BoardConfigStateBuilder get boardConfigState =>
+      _$this._boardConfigState ??= new BoardConfigStateBuilder();
+  set boardConfigState(BoardConfigStateBuilder? boardConfigState) =>
+      _$this._boardConfigState = boardConfigState;
+
   ButtonsStateBuilder();
 
   ButtonsStateBuilder get _$this {
@@ -110,6 +123,7 @@ class ButtonsStateBuilder
       _dimension = $v.dimension;
       _turnsLeft = $v.turnsLeft;
       _topPadding = $v.topPadding;
+      _boardConfigState = $v.boardConfigState?.toBuilder();
       _$v = null;
     }
     return this;
@@ -139,12 +153,16 @@ class ButtonsStateBuilder
               turnsLeft: BuiltValueNullFieldError.checkNotNull(
                   turnsLeft, 'ButtonsState', 'turnsLeft'),
               topPadding: BuiltValueNullFieldError.checkNotNull(
-                  topPadding, 'ButtonsState', 'topPadding'));
+                  topPadding, 'ButtonsState', 'topPadding'),
+              boardConfigState: _boardConfigState?.build());
     } catch (_) {
       late String _$failedField;
       try {
         _$failedField = 'board';
         _board?.build();
+
+        _$failedField = 'boardConfigState';
+        _boardConfigState?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'ButtonsState', _$failedField, e.toString());

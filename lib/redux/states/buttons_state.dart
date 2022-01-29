@@ -1,3 +1,4 @@
+import 'package:bt_game/redux/states/board_config_state.dart';
 import 'package:bt_logic/bt_logic.dart';
 import 'package:built_value/built_value.dart';
 import 'package:flame/components.dart';
@@ -14,4 +15,5 @@ abstract class ButtonsState implements Built<ButtonsState, ButtonsStateBuilder> 
   int get dimension;
   int get turnsLeft;
   int get topPadding;
+  BoardConfigState? get boardConfigState;
 }

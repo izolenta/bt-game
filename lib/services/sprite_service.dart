@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/sprite.dart';
 
 class SpriteService {
 

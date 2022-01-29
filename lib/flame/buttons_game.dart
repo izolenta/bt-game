@@ -59,7 +59,7 @@ class ButtonsGame extends FlameGame with HasTappables {
     _spriteService.initSprites();
     _background = Background(_spriteService, state.screenSize!);
     _fillInitialBoard();
-    _dispatcher.dispatch(GenerateFieldAction(state.dimension, Difficulty.hard));
+    _dispatcher.dispatch(GenerateFieldAction(state.dimension, Difficulty.easy));
     _notifier.onBoardGenerated.listen(_onBoardGenerated);
     _notifier.onMoveDone.listen(_onMoveDone);
     super.onLoad();

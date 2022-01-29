@@ -1,8 +1,6 @@
-import 'package:bt_logic/bt_logic.dart';
-
 class GenerateFieldAction {
   final int dimension;
-  final Difficulty difficulty;
+  final int difficulty;
 
   GenerateFieldAction(this.dimension, this.difficulty);
 }

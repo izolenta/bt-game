@@ -16,9 +16,7 @@ dependencies:
   json_annotation: ^4.1.0
   redux_epics: ^0.15.0
   built_value: ^8.1.1
-  build_runner: ^2.1.2
   built_collection: ^5.1.0
-  built_value_generator: ^8.0.4
   json_serializable: ^5.0.2
   sizer: ^2.0.15
   logger: ^1.1.0
@@ -26,11 +24,15 @@ dependencies:
   get_it: ^7.2.0
   bt_logic:
     path: '../bt-logic'
+  hive: ^2.0.5
+  hive_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
+  built_value_generator: ^8.1.4
+  build_runner: ^2.1.7
 
 flutter:
   uses-material-design: true
@@ -41,4 +43,8 @@ flutter:
   assets:
     - assets/images/sprites.png
     - assets/images/bg.png
+    - assets/boards/x7.csv
+    - assets/boards/x10.csv
+    - assets/boards/x12.csv
+    - assets/boards/x15.csv
 
